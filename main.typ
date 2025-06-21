@@ -398,27 +398,40 @@
   en: [Quotation marks should have different widths for Chinese and Western text],
   zh: [中西文引号的宽度应当不同],
 )
-
 #level.basic
 #issue("typst#5858")
 #workaround("https://typst-doc-cn.github.io/guide/FAQ/smartquote-font.html")
 
 #babel(
-  en: [Both Chinese and Western quotation marks (and apostrophes) use the same Unicode code points:],
-  zh: [中西文的引号（及撇号）都使用相同Unicode码位：],
+  en: [In Western writing, we typically input "dumb quotes" (straight quotes) like `'` and `"` on the keyboard, which are then automatically converted to "smart quotes" (curved quotes) through Typst's smart quote system. Chinese and Western smart quotation marks (and apostrophes) end up using the same Unicode code points:],
+  zh: [在西文输入中，我们通常在键盘上输入"直引号"如 `'` 和 `"`，然后通过 Typst 的智能引号系统自动转换为"弯引号"。中西文的智能引号（及撇号）最终都使用相同的 Unicode 码位：],
 )
-#"‘’“”".clusters().map(unichar).map(list.item).join()
+
+#"''""".clusters().map(unichar).map(list.item).join()
+
 #babel(
-  en: [But punctuation in Chinese is usually supposed to be wider than that in Western languages. This cannot be achieved automatically yet.],
-  zh: [但中文的标点通常应该比西文的宽。当前这还无法自动实现。],
+  en: [The smart quote conversion for Western text works as follows:],
+  zh: [西文的智能引号转换过程如下：],
+)
+
+```example
+// #babel(en: [Western input (dumb quotes)], zh: [西文输入（直引号）])
+"Hello 'world'!"
+
+// #babel(en: [Output (smart quotes)], zh: [输出（智能引号）])
+"Hello 'world'!"
+```
+
+#babel(
+  en: [The problem is that punctuation in Chinese typography is usually supposed to be wider (full-width) than that in Western languages, but this cannot be achieved automatically since both languages share the same Unicode code points for smart quotes.],
+  zh: [问题在于，中文排版中的标点通常应该比西文的宽（全角），但由于中西文的智能引号使用相同的 Unicode 码位，这无法自动实现。],
 )
 
 ```example
 >>> Current: \
-我说：“T'Pol 是‘虚构’人物！”
-
+我说："T'Pol 是'虚构'人物！"
 >>> Expected: \
->>> 我说：“#text(font: "New Computer Modern")[T'Pol] 是‘虚构’人物！”
+>>> 我说："#text(font: "New Computer Modern")[T'Pol] 是'虚构'人物！"
 ```
 
 == #bbl(en: [Emphasis & highlighting], zh: [强调与突出显示])
